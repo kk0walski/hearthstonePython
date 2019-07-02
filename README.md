@@ -1,0 +1,1 @@
+##Zaimplementowanie algorytmu Monte Carlo Tree Search na przykładzie gry hearthstone w pythonie. 
