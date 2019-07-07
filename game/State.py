@@ -1,15 +1,15 @@
 from copy import deepcopy
 
+from game.Hero import Hero
 from game.actions import Action as actions
 from game.cards import card as cards
-from game.players.base import Player
 
 
 class GameState(object):
 
     def __init__(self, cfg):
-        self.player_A = Player('Pyjter', cfg)
-        self.player_B = Player('Mati', cfg)
+        self.player_A = Hero('Pyjter', cfg)
+        self.player_B = Hero('Mati', cfg)
         self.step_no = 1  # current game step number
 
     def can_use_card(self, player, card):

@@ -1,9 +1,8 @@
-"""Player module"""
 import game.config as cfg
 from game.cards.availableCards import get_all_available_cards
 
 
-class Player(object):
+class Hero(object):
     """
     Health
     Mana points
@@ -23,17 +22,11 @@ class Player(object):
     def is_dead(self):
         return self.health <= 0
 
-    def play_turn(self, game_state):
-        """This method should be implemented in classes, which inherit
-        from this one. Here the actual actions should be chosen and
-        packed into a Turn object."""
-        pass
-
     def __hash__(self):
         return hash((self.name, self.health, self.mana, tuple(self.minions)))
 
     def __eq__(self, other):
-        if isinstance(other, Player):
+        if isinstance(other, Hero):
             return hash(self) == hash(other)
         return False
 
@@ -41,9 +34,9 @@ class Player(object):
         return not self.__eq__(other)
 
     def __repr__(self):
-        plr_str  = "Player: {name}; Health: {current_health}/{max_health}; " \
-            "Mana: {current_mana}/{max_mana}; " \
-            "Minions: {minions}"
+        plr_str = "Player: {name}; Health: {current_health}/{max_health}; " \
+                  "Mana: {current_mana}/{max_mana}; " \
+                  "Minions: {minions}"
 
         return plr_str.format(name=self.name,
                               current_health=self.health,

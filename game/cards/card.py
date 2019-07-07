@@ -32,10 +32,10 @@ class MinionCard(Card):
         self.can_attack = True
 
     def apply(self, game_state, source, target):
-        from game.players import base
+        from game.Hero import Hero
 
         # Perform attack
-        if isinstance(target, base):
+        if isinstance(target, Hero):
             target.health -= self.attack
         elif isinstance(target, MinionCard):
             target.health -= self.attack
