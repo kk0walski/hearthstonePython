@@ -9,7 +9,7 @@ class Action(object):
         * put minion on field (max. 7 on field)
     """
 
-    def perform(self):
+    def perform(self, game_state):
         """Perform action"""
         pass
 
@@ -58,3 +58,9 @@ class PlayMinion(Action):
         minion = player.minions[self.minion]
         minion.apply(self.state, player, target)
         minion.can_attack = False
+
+
+class EndTurn(Action):
+
+    def perform(self, game_state):
+        game_state.step_no += 1

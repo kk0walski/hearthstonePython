@@ -41,11 +41,13 @@ class GameState(object):
             for target_idx in (-1, *list(range(len(opponent.minions)))):
                 possibleMoves.append(actions.PlayMinion(idx, target_idx))
 
+        possibleMoves.append(actions.EndTurn())
+
         return possibleMoves
 
     def takeAction(self, action):
         newState = deepcopy(self)
-        actions.perform(newState)
+        action.perform(newState)
         return newState
 
     def getReward(self):
