@@ -1,10 +1,10 @@
-from game.players import Player
+from game.players import base
 
 class GameState(object):
 
     def __init__(self, cfg):
-        self.player_A = Player('Pyjter', cfg)
-        self.player_B = Player('Mati', cfg)
+        self.player_A = base('Pyjter', cfg)
+        self.player_B = base('Mati', cfg)
         self.current_player = None  # player_A.name or player_B.name
         self.step_no = None  # current game step number
 

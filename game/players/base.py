@@ -1,4 +1,5 @@
 """Player module"""
+from game.cards.availableCards import get_all_available_cards
 
 class Player(object):
     """
@@ -8,11 +9,12 @@ class Player(object):
     Cards
     Minions
     """
+
     def __init__(self, name, cfg):
         self.name = name
         self.health = cfg.INITIAL_HEALTH
         self.mana = cfg.INITIAL_MANA
-        self.minions = []
+        self.minions = get_all_available_cards()
         self.cfg = cfg
 
     def is_dead(self):

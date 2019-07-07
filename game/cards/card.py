@@ -32,10 +32,10 @@ class MinionCard(Card):
         self.can_attack = True
 
     def apply(self, game_state, source, target):
-        from game.players import Player
+        from game.players import base
 
         # Perform attack
-        if isinstance(target, Player):
+        if isinstance(target, base):
             target.health -= self.attack
         elif isinstance(target, MinionCard):
             target.health -= self.attack
@@ -47,7 +47,7 @@ class MinionCard(Card):
         fmt_str = "MC({name}, " \
                   "H: {health}, " \
                   "A: {attack}, " \
-                  "C: {cost}, "
+                  "C: {cost})"
 
         return fmt_str.format(name=self.name, health=self.health,
                               attack=self.attack, cost=self.cost)
