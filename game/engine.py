@@ -9,7 +9,7 @@ class GameEngine(object):
         self.gameState = GameState(cfg)
 
     def run(self):
-        while not self.gameState.is_terminal_state():
+        while not self.gameState.isTerminal():
             pass
         # Update game state (increment stepNumber, set current player)
         # Choose player and get turn from player

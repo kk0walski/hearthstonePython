@@ -14,7 +14,8 @@ class Player(object):
         self.name = name
         self.health = cfg.INITIAL_HEALTH
         self.mana = cfg.INITIAL_MANA
-        self.minions = get_all_available_cards()
+        self.deck = get_all_available_cards()
+        self.minions = []
         self.cfg = cfg
 
     def is_dead(self):
