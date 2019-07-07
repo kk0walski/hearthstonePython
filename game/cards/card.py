@@ -20,3 +20,45 @@ class Card(object):
             :return: modified copy of input game state
         """
         pass
+
+
+class MinionCard(Card):
+
+    def __init__(self, name, health, attack, cost):
+        self.name = name
+        self.health = health
+        self.attack = attack
+        self.cost = cost
+        self.can_attack = True
+
+    def apply(self, game_state, source, target):
+        from game.players import Player
+
+        # Perform attack
+        if isinstance(target, Player):
+            target.health -= self.attack
+        elif isinstance(target, MinionCard):
+            target.health -= self.attack
+            self.health -= target.attack
+        else:
+            raise ValueError('Target not defined or not recognized!')
+
+    def __repr__(self):
+        fmt_str = "MC({name}, " \
+                  "H: {health}, " \
+                  "A: {attack}, " \
+                  "C: {cost}, "
+
+        return fmt_str.format(name=self.name, health=self.health,
+                              attack=self.attack, cost=self.cost)
+
+    def __hash__(self):
+        return hash((self.name, self.health, self.attack, self.can_attack))
+
+    def __eq__(self, other):
+        if isinstance(other, MinionCard):
+            return hash(self) == hash(other)
+        return False
+
+    def __ne__(self, other):
+        return not self.__eq__(other)
