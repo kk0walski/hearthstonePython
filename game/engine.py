@@ -6,7 +6,7 @@ class GameEngine(object):
     """
 
     def __init__(self, cfg):
-        self.gameState = GameState(cfg)
+        self.gameState = GameState()
 
     def run(self):
         while not self.gameState.isTerminal():

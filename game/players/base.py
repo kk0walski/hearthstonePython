@@ -1,5 +1,7 @@
 """Player module"""
+import game.config as cfg
 from game.cards.availableCards import get_all_available_cards
+
 
 class Player(object):
     """
@@ -10,7 +12,7 @@ class Player(object):
     Minions
     """
 
-    def __init__(self, name, cfg):
+    def __init__(self, name):
         self.name = name
         self.health = cfg.INITIAL_HEALTH
         self.mana = cfg.INITIAL_MANA

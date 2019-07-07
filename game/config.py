@@ -1,23 +1,5 @@
-"""Common game configuration"""
-from collections import namedtuple
-
-# TODO: read from file
-
-Config = namedtuple('Config', [
-    'INITIAL_MANA',
-    'INITIAL_HEALTH',
-])
-
-
-def load_cfg():
-    cfg = Config(
-        INITIAL_HEALTH=20,
-        INITIAL_MANA=1
-    )
-    return cfg
-
-
-Config = namedtuple('Config', [
-    'INITIAL_MANA',
-    'INITIAL_HEALTH',
-])
+INITIAL_HEALTH = 20
+INITIAL_MANA = 0
+MAX_MINIONS = 7
+MAX_MANA = 10
+VERBOSE = True
