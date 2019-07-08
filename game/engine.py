@@ -5,8 +5,8 @@ class GameEngine(object):
     Main loop of game
     """
 
-    def __init__(self, cfg):
-        self.gameState = GameState()
+    def __init__(self, nameA, nameB, cfg):
+        self.gameState = GameState(nameA, nameB, cfg)
 
     def run(self):
         while not self.gameState.isTerminal():

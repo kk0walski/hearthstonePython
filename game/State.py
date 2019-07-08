@@ -7,17 +7,30 @@ from game.cards import card as cards
 
 class GameState(object):
 
-    def __init__(self, cfg):
-        self.player_A = Hero('Pyjter', cfg)
-        self.player_B = Hero('Mati', cfg)
-        self.step_no = 1  # current game step number
+    def __init__(self, nameA, nameB, cfg):
+        self.player_A = Hero(nameA, cfg)
+        self.player_B = Hero(nameB, cfg)
+        self.curr_step = 1
+
 
     def can_use_card(self, player, card):
         return player.already_used_mana + card.cost <= player.mana
 
     def isTerminal(self):
         """Check if game is over (one player lost)"""
-        return self.player_A.health == 0 or self.player_B.health == 0
+        return self.player_A.is_dead() or self.player_B.is_dead()
+
+    def get_winning_player(self):
+        """Return player that won the game"""
+
+        if self.player_A.is_dead():
+            return self.player_B
+        elif self.player_B.is_dead():
+            return self.player_A
+
+        assert not self.is_terminal_state()
+        raise ValueError('Do not call get_winning_player '
+                         'before terminal state')
 
     def getPossibleActions(self):
 
@@ -58,3 +71,20 @@ class GameState(object):
         if self.step_no % 2 == 1:
             return self.player_A, self.player_B
         return self.player_B, self.player_A
+
+    def __repr__(self):
+        return "GameState"
+
+    def __hash__(self):
+        return hash((self.player_A, self.player_B, self.curr_step))
+
+    def __eq__(self, other):
+        if isinstance(other, GameState):
+            return hash(self) == hash(other)
+            # return self.player_A == other.player_A and \
+            #        self.player_B == other.player_B and \
+            #        self.curr_step == other.curr_step
+        return False
+
+    def __ne__(self, other):
+        return not self.__eq__(other)
