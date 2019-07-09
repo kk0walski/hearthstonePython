@@ -16,7 +16,7 @@ class GameEngine(object):
         self.game_state = game_state
 
     def run(self):
-        while not self.game_state.is_terminal_state():
+        while not self.game_state.isTerminal():
             self.game_state.curr_step += 1
             game_state_cpy = deepcopy(self.game_state)
 

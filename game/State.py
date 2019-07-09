@@ -1,13 +1,14 @@
 from copy import deepcopy
 
+from game.actions.Action import PlayMinion, PutMinion
 from game.cards import card as cards
 
 
 class GameState(object):
 
-    def __init__(self, player_A, player_B, curr_step):
-        self.player_A = player_A
-        self.player_B = player_B
+    def __init__(self, playerA, playerB, curr_step):
+        self.player_A = playerA
+        self.player_B = playerB
         self.curr_step = curr_step
 
 
@@ -26,7 +27,7 @@ class GameState(object):
         elif self.player_B.is_dead():
             return self.player_A
 
-        assert not self.is_terminal_state()
+        assert not self.isTerminal()
         raise ValueError('Do not call get_winning_player '
                          'before terminal state')
 
@@ -46,7 +47,7 @@ class GameState(object):
             # Put minion cards
             elif isinstance(card, cards.MinionCard):
                 actions['minion_puts'].append(
-                    actions.PutMinion(idx)
+                    PutMinion(idx)
                 )
 
         # Play minion (attack)
@@ -56,7 +57,7 @@ class GameState(object):
 
             for target_idx in (-1, *list(range(len(opponent.minions)))):
                 actions['minion_plays'].append(
-                    actions.PlayMinion(idx, target_idx)
+                    PlayMinion(idx, target_idx)
                 )
 
         actions['no_actions'] = actions.EndTurn()
@@ -71,7 +72,7 @@ class GameState(object):
 
     def get_players(self):
         """Returns (current_player, opponent)"""
-        if self.step_no % 2 == 1:
+        if self.curr_step % 2 == 1:
             return self.player_A, self.player_B
         return self.player_B, self.player_A
 
@@ -91,7 +92,6 @@ class GameState(object):
 
     def __ne__(self, other):
         return not self.__eq__(other)
-
 
 class PlayerState(object):
 

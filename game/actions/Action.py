@@ -20,11 +20,10 @@ def increment_mana(player):
 
 
 def take_card(player):
-    if not player.deck.is_empty():
+    if not player.deck:
         player.cards.append(player.deck.pop())
     else:
-        player.deck.no_attempt_pop_when_empty += 1
-        player.health -= player.deck.no_attempt_pop_when_empty
+        player.health -= 1
 
 class PutMinion(Action):
 
@@ -56,7 +55,7 @@ class PlayMinion(Action):
             target = opponent.minions[self.target]
 
         minion = player.minions[self.minion]
-        minion.apply(self.state, player, target)
+        minion.apply(game_state, player, target)
         minion.can_attack = False
 
 
