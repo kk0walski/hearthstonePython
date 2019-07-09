@@ -17,7 +17,6 @@ class Hero(object):
         self.mana = cfg.INITIAL_MANA
         self.deck = get_all_available_cards()
         self.minions = []
-        self.cfg = cfg
 
     def is_dead(self):
         return self.health <= 0
@@ -40,7 +39,7 @@ class Hero(object):
 
         return plr_str.format(name=self.name,
                               current_health=self.health,
-                              max_health=self.cfg.INITIAL_HEALTH,
+                              max_health=cfg.INITIAL_HEALTH,
                               current_mana=self.mana,
-                              max_mana=self.cfg.INITIAL_MANA,
+                              max_mana=cfg.INITIAL_MANA,
                               minions=self.minions)

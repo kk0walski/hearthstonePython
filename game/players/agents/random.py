@@ -1,5 +1,6 @@
 import random
 
+from game.State import PlayerState
 from game.players.Player import BasePlayer
 
 
@@ -10,13 +11,15 @@ class RandomPlayer(BasePlayer):
 
     def play_turn(self, game_state):
         while True:
-            possible_actions = game_state.getPossibleActions()
+            player, oponent = game_state.get_players()
+            playerState = PlayerState(player, game_state)
+            possible_actions = playerState.getPossibleActions()
 
             pa = (*possible_actions['minion_plays'],
                   *possible_actions['minion_puts'],
                   *possible_actions['no_actions'])
 
             chosen_action = random.choice(pa)
-            newState = game_state.takeAction(chosen_action)
+            newState = playerState.takeAction(chosen_action)
 
             return newState

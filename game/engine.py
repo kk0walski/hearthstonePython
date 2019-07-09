@@ -23,7 +23,7 @@ class GameEngine(object):
             player, _ = game_state_cpy.get_players()
             self.prepare_player(player)
 
-            if game_state_cpy.is_terminal_state():
+            if game_state_cpy.isTerminal():
                 self.game_state = game_state_cpy
                 break
 
