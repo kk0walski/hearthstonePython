@@ -1,16 +1,14 @@
 from copy import deepcopy
 
-from game.Hero import Hero
-from game.actions import Action as actions
 from game.cards import card as cards
 
 
 class GameState(object):
 
-    def __init__(self, nameA, nameB, cfg):
-        self.player_A = Hero(nameA, cfg)
-        self.player_B = Hero(nameB, cfg)
-        self.curr_step = 1
+    def __init__(self, player_A, player_B, curr_step):
+        self.player_A = player_A
+        self.player_B = player_B
+        self.curr_step = curr_step
 
 
     def can_use_card(self, player, card):
@@ -32,9 +30,12 @@ class GameState(object):
         raise ValueError('Do not call get_winning_player '
                          'before terminal state')
 
-    def getPossibleActions(self):
-
-        possibleMoves = []
+    def get_possible_actions(self):
+        actions = {
+            'minion_puts': [],
+            'minion_plays': [],
+            'no_actions': None
+        }
 
         player, opponent = self.get_players()
 
@@ -42,9 +43,11 @@ class GameState(object):
             if not self.can_use_card(player, card):
                 continue
 
-            # Play minion cards
-            if isinstance(card, cards.MinionCard):
-                possibleMoves.append(actions.PutMinion(idx))
+            # Put minion cards
+            elif isinstance(card, cards.MinionCard):
+                actions['minion_puts'].append(
+                    actions.PutMinion(idx)
+                )
 
         # Play minion (attack)
         for idx, minion in enumerate(player.minions):
@@ -52,19 +55,19 @@ class GameState(object):
                 continue
 
             for target_idx in (-1, *list(range(len(opponent.minions)))):
-                possibleMoves.append(actions.PlayMinion(idx, target_idx))
+                actions['minion_plays'].append(
+                    actions.PlayMinion(idx, target_idx)
+                )
 
-        possibleMoves.append(actions.EndTurn())
+        actions['no_actions'] = actions.EndTurn()
 
-        return possibleMoves
+        return actions
 
     def takeAction(self, action):
         newState = deepcopy(self)
         action.perform(newState)
         return newState
 
-    def getReward(self):
-        pass
 
     def get_players(self):
         """Returns (current_player, opponent)"""
@@ -88,3 +91,28 @@ class GameState(object):
 
     def __ne__(self, other):
         return not self.__eq__(other)
+
+
+class PlayerState(object):
+
+    def __init__(self, hero, state):
+        self.hero = hero
+        self.state = state
+
+    def getPossibleActions(self):
+        return self.state.get_possible_actions()
+
+    def isTerminal(self):
+        return self.state.isTerminal()
+
+    def takeAction(self, action):
+        return PlayerState(self.hero, self.state.takeAction(action))
+
+    def getReward(self):
+        if self.isTerminal():
+            if self.hero.is_dead():
+                return -1
+            else:
+                return 1
+        else:
+            return 0
