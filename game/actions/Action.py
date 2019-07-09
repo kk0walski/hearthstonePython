@@ -62,4 +62,4 @@ class PlayMinion(Action):
 class EndTurn(Action):
 
     def perform(self, game_state):
-        game_state.step_no += 1
+        game_state.curr_step += 1

@@ -11,6 +11,9 @@ class GameState(object):
         self.player_B = playerB
         self.curr_step = curr_step
 
+    def can_use_card(self, player, card):
+        return player.already_used_mana + card.cost <= player.mana
+
     def isTerminal(self):
         """Check if game is over (one player lost)"""
         return self.player_A.is_dead() or self.player_B.is_dead()
@@ -26,6 +29,44 @@ class GameState(object):
         assert not self.isTerminal()
         raise ValueError('Do not call get_winning_player '
                          'before terminal state')
+
+    def get_possible_actions(self):
+        actions = {
+            'minion_puts': [],
+            'minion_plays': [],
+            'no_actions': None
+        }
+
+        player, opponent = self.get_players()
+
+        for idx, card in enumerate(player.minions):
+            if not self.can_use_card(player, card):
+                continue
+
+            # Put minion cards
+            elif isinstance(card, cards.MinionCard):
+                actions['minion_puts'].append(
+                    PutMinion(idx)
+                )
+
+        # Play minion (attack)
+        for idx, minion in enumerate(player.minions):
+            if not minion.can_attack:
+                continue
+
+            for target_idx in (-1, *list(range(len(opponent.minions)))):
+                actions['minion_plays'].append(
+                    PlayMinion(idx, target_idx)
+                )
+
+        actions['end_turn'] = EndTurn()
+
+        return actions
+
+    def takeAction(self, action):
+        newState = deepcopy(self)
+        action.perform(newState)
+        return newState
 
 
     def get_players(self):
@@ -58,48 +99,17 @@ class PlayerState(object):
         self.state = state
 
     def can_use_card(self, player, card):
-        return card.cost <= player.mana
+        return player.already_used_mana + card.cost <= player.mana
 
     def getPossibleActions(self):
-        actions = {
-            'minion_puts': [],
-            'minion_plays': [],
-            'no_actions': None
-        }
-
-        player, opponent = self.state.get_players()
-
-        for idx, card in enumerate(player.minions):
-            if not self.can_use_card(player, card):
-                continue
-
-            # Put minion cards
-            elif isinstance(card, cards.MinionCard):
-                actions['minion_puts'].append(
-                    PutMinion(idx)
-                )
-
-        # Play minion (attack)
-        for idx, minion in enumerate(player.minions):
-            if not minion.can_attack:
-                continue
-
-            for target_idx in (-1, *list(range(len(opponent.minions)))):
-                actions['minion_plays'].append(
-                    PlayMinion(idx, target_idx)
-                )
-
-        actions['no_actions'] = EndTurn()
-
-        return actions
+        possible_actions = self.state.get_possible_actions()
+        return [*possible_actions['minion_puts'], *possible_actions['minion_plays'], possible_actions['end_turn']]
 
     def isTerminal(self):
         return self.state.isTerminal()
 
     def takeAction(self, action):
-        newState = deepcopy(self.state)
-        action.perform(newState)
-        return newState
+        return PlayerState(self.hero, self.state.takeAction(action))
 
     def getReward(self):
         if self.isTerminal():
