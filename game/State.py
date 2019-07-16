@@ -40,7 +40,8 @@ class GameState(object):
     def get_possible_actions(self):
         actions = {
             'minion_puts': [],
-            'minion_plays': [],
+            'attack_player': [],
+            'attack_minion': [],
             'end_turn': []
         }
 
@@ -62,9 +63,14 @@ class GameState(object):
                 continue
 
             for target_idx in (-1, *list(range(len(opponent.minions)))):
-                actions['minion_plays'].append(
-                    PlayMinion(idx, target_idx)
-                )
+                if target_idx == -1:
+                    actions['attack_player'].append(
+                        PlayMinion(idx, target_idx)
+                    )
+                else:
+                    actions['attack_minion'].append(
+                        PlayMinion(idx, target_idx)
+                    )
 
         actions['end_turn'].append(EndTurn())
 
@@ -195,11 +201,28 @@ class ControlingState(TurnState):
     def __init__(self, hero, state, initialState=None):
         super(ControlingState, self).__init__(hero, state, initialState)
 
+    def getPossibleActions(self):
+        oponent = self.getOponent(self.state)
+        reasult = []
+        possible_actions = self.state.get_possible_actions()
+
+        if len(oponent.minions) != 0:
+            for key, value in possible_actions.items():
+                if key != 'attack_player':
+                    reasult.extend(value)
+        else:
+            for key, value in possible_actions.items():
+                reasult.extend(value)
+
+        return reasult
+
     def takeAction(self, action):
         return ControlingState(self.hero, self.state.takeAction(action), self.initialState)
 
     def getReward(self):
         initialOponent = self.getOponent(self.initialState)
         oponent = self.getOponent(self.state)
-        return len(initialOponent.minions) - len(oponent.minions) * 5 + (
-                    len(self.hero.minions) - len(oponent.minions)) * 5 + (initialOponent.health - oponent.health) * 2
+        if len(oponent.minions) > 0:
+            return (len(initialOponent.minions) - len(oponent.minions)) * 10
+        else:
+            return (initialOponent.health - oponent.health)
