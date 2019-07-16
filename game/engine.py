@@ -2,7 +2,6 @@
 from copy import deepcopy
 
 from game import config
-from game.actions import Action as action
 from game.gui import StateGui
 
 
@@ -22,7 +21,6 @@ class GameEngine(object):
             game_state_cpy = deepcopy(self.game_state)
 
             player, _ = game_state_cpy.get_players()
-            self.prepare_player(player)
 
             if game_state_cpy.isTerminal():
                 self.game_state = game_state_cpy
@@ -42,12 +40,3 @@ class GameEngine(object):
             print('Player {} won the game!'.format(winning_player.name))
 
         return winning_player
-
-    @staticmethod
-    def prepare_player(player):
-        action.take_card(player)
-        action.increment_mana(player)
-        player.already_used_mana = 0
-
-        for minion in player.minions:
-            minion.can_attack = True

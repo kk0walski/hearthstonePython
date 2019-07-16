@@ -1,5 +1,6 @@
 import game.config as cfg
 
+
 class Action(object):
     """
     Single action like:
@@ -64,5 +65,11 @@ class PlayMinion(Action):
 class EndTurn(Action):
 
     def perform(self, game_state):
-        print("END_TURN")
+        _, oponent = game_state.get_players()
+        increment_mana(oponent)
+        take_card(oponent)
+        oponent.already_given_mana += 1
+        for minion in oponent.minions:
+            minion.can_attack = True
         game_state.curr_step += 1
+        print("END_TURN")

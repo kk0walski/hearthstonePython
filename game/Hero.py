@@ -11,11 +11,12 @@ class Hero(object):
     Minions
     """
 
-    def __init__(self, name):
+    def __init__(self, name, mana=cfg.INITIAL_MANA, health=cfg.INITIAL_HEALTH):
         self.name = name
-        self.health = cfg.INITIAL_HEALTH
-        self.mana = cfg.INITIAL_MANA
+        self.health = health
+        self.mana = mana
         self.deck = get_all_available_cards()
+        self.already_given_mana = mana
         self.minions = []
         self.cards = []
 
