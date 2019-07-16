@@ -69,8 +69,8 @@ class PlayMinion(Action):
         minion.can_attack = False
 
     def __repr__(self):
-        return "ATTACK_MINION " + str(self.minion_idx) + " ON: " + str(
-            self.target_idx) if self.target_idx != -1 else 'PLAYER'
+        oponent = str(self.target_idx) if self.target_idx != -1 else 'PLAYER'
+        return "ATTACK_MINION " + str(self.minion_idx) + " ON: " + oponent
 
 
 class EndTurn(Action):
