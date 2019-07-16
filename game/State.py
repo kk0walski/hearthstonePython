@@ -130,12 +130,13 @@ class GameState(object):
 
 class PlayerState(object):
 
-    def __init__(self, hero, state):
+    def __init__(self, hero, state, initialState=None):
         self.hero = hero
         self.state = state
-
-    def can_use_card(self, player, card):
-        return player.already_used_mana + card.cost <= player.mana
+        if not initialState:
+            self.initialState = deepcopy(state)
+        else:
+            self.initialState = initialState
 
     def getPossibleActions(self):
         reasult = []
@@ -144,17 +145,61 @@ class PlayerState(object):
             reasult.extend(item)
         return reasult
 
+    def getOponent(self, my_state):
+        if my_state.player_A.name == self.hero.name:
+            return my_state.player_B
+        else:
+            return my_state.player_A
+
+
+class MCTSState(PlayerState):
+
+    def __init__(self, hero, state, initialState=None):
+        super(MCTSState, self).__init__(hero, state, initialState)
+
     def isTerminal(self):
         return self.state.isTerminal()
 
     def takeAction(self, action):
-        return PlayerState(self.hero, self.state.takeAction(action))
+        return MCTSState(self.hero, self.state.takeAction(action), self.initialState)
 
     def getReward(self):
-        if self.isTerminal():
-            if self.hero.is_dead():
-                return -1
-            else:
-                return 1
-        else:
-            return 0
+        return -1 if self.hero.is_dead() else 1
+
+
+class TurnState(PlayerState):
+    def __init__(self, hero, state, initialState=None):
+        super(TurnState, self).__init__(hero, state, initialState)
+
+    def isTerminal(self):
+        return self.state.curr_step != self.initialState.curr_step
+
+
+class AggressiveState(TurnState):
+
+    def __init__(self, hero, state, initialState=None):
+        super(AggressiveState, self).__init__(hero, state, initialState)
+
+    def takeAction(self, action):
+        return AggressiveState(self.hero, self.state.takeAction(action), self.initialState)
+
+    def getReward(self):
+        initialOponent = self.getOponent(self.initialState)
+        oponent = self.getOponent(self.state)
+        return (len(initialOponent.minions) - len(oponent.minions)) * 2 + (
+                    len(self.hero.minions) - len(oponent.minions)) * 2 + (initialOponent.health - oponent.health) * 10
+
+
+class ControlingState(TurnState):
+
+    def __init__(self, hero, state, initialState=None):
+        super(ControlingState, self).__init__(hero, state, initialState)
+
+    def takeAction(self, action):
+        return ControlingState(self.hero, self.state.takeAction(action), self.initialState)
+
+    def getReward(self):
+        initialOponent = self.getOponent(self.initialState)
+        oponent = self.getOponent(self.state)
+        return len(initialOponent.minions) - len(oponent.minions) * 5 + (
+                    len(self.hero.minions) - len(oponent.minions)) * 5 + (initialOponent.health - oponent.health) * 2
