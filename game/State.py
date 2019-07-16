@@ -34,7 +34,7 @@ class GameState(object):
         actions = {
             'minion_puts': [],
             'minion_plays': [],
-            'no_actions': None
+            'end_turn': []
         }
 
         player, opponent = self.get_players()
@@ -59,7 +59,7 @@ class GameState(object):
                     PlayMinion(idx, target_idx)
                 )
 
-        actions['end_turn'] = EndTurn()
+        actions['end_turn'].append(EndTurn())
 
         return actions
 
@@ -102,8 +102,8 @@ class PlayerState(object):
         return player.already_used_mana + card.cost <= player.mana
 
     def getPossibleActions(self):
-        possible_actions = self.state.get_possible_actions()
-        return [*possible_actions['minion_puts'], *possible_actions['minion_plays'], possible_actions['end_turn']]
+        possible_actions = {k:v for k,v in self.state.get_possible_actions().items() if v }
+        return possible_actions.values()
 
     def isTerminal(self):
         return self.state.isTerminal()

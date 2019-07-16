@@ -17,6 +17,7 @@ class Hero(object):
         self.mana = cfg.INITIAL_MANA
         self.deck = get_all_available_cards()
         self.minions = []
+        self.cards = []
 
     def is_dead(self):
         return self.health <= 0

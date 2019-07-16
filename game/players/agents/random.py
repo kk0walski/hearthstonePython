@@ -10,16 +10,15 @@ class RandomPlayer(BasePlayer):
         super(RandomPlayer, self).__init__(name)
 
     def play_turn(self, game_state):
-        while True:
-            player, oponent = game_state.get_players()
-            playerState = PlayerState(player, game_state)
-            possible_actions = playerState.getPossibleActions()
+        player, oponent = game_state.get_players()
+        playerState = PlayerState(player, game_state)
+        possible_actions = playerState.getPossibleActions()
 
-            pa = (*possible_actions['minion_plays'],
-                  *possible_actions['minion_puts'],
-                  *possible_actions['no_actions'])
+        print("ACTIONS: " + str(possible_actions))
 
-            chosen_action = random.choice(pa)
-            newState = playerState.takeAction(chosen_action)
+        chosen_action = random.choice(possible_actions)
 
-            return newState
+        newPlayerState = playerState.takeAction(chosen_action)
+        newState = newPlayerState.state
+
+        return newState

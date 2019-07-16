@@ -16,6 +16,7 @@ def create_initial_game_state(clsA, nameA, clsB, nameB):
 
 def prepare_game(game_state):
     for _ in range(3):
+        print("Taking card")
         action.take_card(game_state.player_A)
 
     for _ in range(4):
@@ -24,8 +25,7 @@ def prepare_game(game_state):
 
 def main():
     confs = [
-        (mcts.MCTSPlayer, 'MCTSPlayer', random.RandomPlayer, 'RandomPlayer'),
-        (random.RandomPlayer, 'RandomPlayer', mcts.MCTSPlayer, 'MCTSPlayer'),
+        (random.RandomPlayer, 'RandomPlayer1', random.RandomPlayer, 'RandomPlayer2'),
     ]
     for clsA, nameA, clsB, nameB in confs:
         try:

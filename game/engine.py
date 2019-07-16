@@ -3,6 +3,7 @@ from copy import deepcopy
 
 from game import config
 from game.actions import Action as action
+from game.gui import StateGui
 
 
 class GameEngine(object):
@@ -17,7 +18,7 @@ class GameEngine(object):
 
     def run(self):
         while not self.game_state.isTerminal():
-            self.game_state.curr_step += 1
+
             game_state_cpy = deepcopy(self.game_state)
 
             player, _ = game_state_cpy.get_players()
@@ -27,9 +28,13 @@ class GameEngine(object):
                 self.game_state = game_state_cpy
                 break
 
-            player.play_turn(game_state_cpy)
+            # Print current game_state
+            if config.VERBOSE:
+                print(StateGui.prepare_state(game_state_cpy))
 
-            self.game_state = game_state_cpy
+            new_state = player.play_turn(game_state_cpy)
+
+            self.game_state = new_state
 
         winning_player = self.game_state.get_winning_player()
 

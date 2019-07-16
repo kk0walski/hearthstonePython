@@ -20,7 +20,7 @@ def increment_mana(player):
 
 
 def take_card(player):
-    if not player.deck:
+    if player.deck:
         player.cards.append(player.deck.pop())
     else:
         player.health -= 1
@@ -32,6 +32,7 @@ class PutMinion(Action):
 
     def perform(self, game_state):
         player, _ = game_state.get_players()
+        print("PUT_MINION: " + player.cards[self.card])
         # Get minion
         minion = player.cards[self.card]
         minion.can_attack = False
@@ -54,6 +55,7 @@ class PlayMinion(Action):
         else:
             target = opponent.minions[self.target]
 
+        print("ATTACK_MINION " + player.minions[self.minion] + " ON: " + target)
         minion = player.minions[self.minion]
         minion.apply(game_state, player, target)
         minion.can_attack = False
@@ -62,4 +64,5 @@ class PlayMinion(Action):
 class EndTurn(Action):
 
     def perform(self, game_state):
+        print("END_TURN")
         game_state.curr_step += 1

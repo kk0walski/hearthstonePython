@@ -14,6 +14,7 @@ class MCTSPlayer(BasePlayer):
         player, oponent = game_state.get_players()
         playerState = PlayerState(player, game_state)
         bestAction = mctsAI.search(initialState=playerState)
-        newState = playerState.takeAction(bestAction)
+        newPlayerState = playerState.takeAction(bestAction)
+        newState = newPlayerState.state
 
         return newState
