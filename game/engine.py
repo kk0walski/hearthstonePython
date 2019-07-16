@@ -2,7 +2,6 @@
 from copy import deepcopy
 
 from game import config
-from game.gui import StateGui
 
 
 class GameEngine(object):
@@ -28,7 +27,7 @@ class GameEngine(object):
 
             # Print current game_state
             if config.VERBOSE:
-                print(StateGui.prepare_state(game_state_cpy))
+                print(game_state_cpy)
 
             new_state = player.play_turn(game_state_cpy)
 
