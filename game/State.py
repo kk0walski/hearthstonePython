@@ -138,8 +138,11 @@ class PlayerState(object):
         return player.already_used_mana + card.cost <= player.mana
 
     def getPossibleActions(self):
-        possible_actions = {k:v for k,v in self.state.get_possible_actions().items() if v }
-        return possible_actions.values()
+        reasult = []
+        possible_actions = self.state.get_possible_actions().values()
+        for item in possible_actions:
+            reasult.extend(item)
+        return reasult
 
     def isTerminal(self):
         return self.state.isTerminal()

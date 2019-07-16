@@ -1,9 +1,8 @@
 import traceback
 
 from game.State import GameState
-from game.actions import Action as action
 from game.engine import GameEngine
-from game.players.agents import random, mcts
+from game.players.agents import random
 
 
 def create_initial_game_state(clsA, nameA, clsB, nameB):
@@ -14,15 +13,6 @@ def create_initial_game_state(clsA, nameA, clsB, nameB):
     return GameState(player_A, player_B, curr_step)
 
 
-def prepare_game(game_state):
-    for _ in range(3):
-        print("Taking card")
-        action.take_card(game_state.player_A)
-
-    for _ in range(4):
-        action.take_card(game_state.player_B)
-
-
 def main():
     confs = [
         (random.RandomPlayer, 'RandomPlayer1', random.RandomPlayer, 'RandomPlayer2'),
@@ -30,7 +20,6 @@ def main():
     for clsA, nameA, clsB, nameB in confs:
         try:
             gs = create_initial_game_state(clsA, nameA, clsB, nameB)
-            prepare_game(gs)
 
             engine = GameEngine(gs)
             winning_player = engine.run()

@@ -33,7 +33,7 @@ class PutMinion(Action):
 
     def perform(self, game_state):
         player, _ = game_state.get_players()
-        print("PUT_MINION: " + player.cards[self.card])
+        print("PUT_MINION: " + str(player.cards[self.card]))
         # Get minion
         minion = player.cards[self.card]
         minion.can_attack = False
@@ -45,20 +45,26 @@ class PutMinion(Action):
 class PlayMinion(Action):
 
     def __init__(self, minion_idx, target_idx):
-        self.minion = minion_idx
-        self.target = target_idx
+        self.minion_idx = minion_idx
+        self.target_idx = target_idx
 
     def perform(self, game_state):
         player, opponent = game_state.get_players()
 
-        if self.target == -1:
+        if self.target_idx == -1:
             target = opponent
         else:
-            target = opponent.minions[self.target]
+            target = opponent.minions[self.target_idx]
 
-        print("ATTACK_MINION " + player.minions[self.minion] + " ON: " + target)
-        minion = player.minions[self.minion]
+        print("ATTACK_MINION " + str(player.minions[self.minion_idx]) + " ON: " + str(target))
+        minion = player.minions[self.minion_idx]
         minion.apply(game_state, player, target)
+        if minion.health <= 0:
+            del player.minions[self.minion_idx]
+
+        if self.target_idx != -1 and opponent.minions[self.target_idx].health <= 0:
+            del opponent.minions[self.target_idx]
+
         minion.can_attack = False
 
 
