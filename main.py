@@ -2,7 +2,7 @@ import traceback
 
 from game.State import GameState
 from game.engine import GameEngine
-from game.players.agents import random
+from game.players.agents import random, mcts
 
 
 def create_initial_game_state(clsA, nameA, clsB, nameB):
@@ -15,7 +15,7 @@ def create_initial_game_state(clsA, nameA, clsB, nameB):
 
 def main():
     confs = [
-        (random.RandomPlayer, 'RandomPlayer1', random.RandomPlayer, 'RandomPlayer2'),
+        (random.RandomPlayer, 'RandomPlayer', mcts.MCTSPlayer, 'MCTSPlayer'),
     ]
     for clsA, nameA, clsB, nameB in confs:
         try:

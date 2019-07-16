@@ -15,6 +15,8 @@ class RandomPlayer(BasePlayer):
         possible_actions = playerState.getPossibleActions()
         chosen_action = random.choice(possible_actions)
 
+        print(chosen_action)
+
         newPlayerState = playerState.takeAction(chosen_action)
         newState = newPlayerState.state
 

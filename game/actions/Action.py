@@ -33,13 +33,15 @@ class PutMinion(Action):
 
     def perform(self, game_state):
         player, _ = game_state.get_players()
-        print("PUT_MINION: " + str(player.cards[self.card]))
         # Get minion
         minion = player.cards[self.card]
         minion.can_attack = False
         player.minions.append(minion)
         player.cards.remove(minion)
         player.mana -= minion.cost
+
+    def __repr__(self):
+        return "PUT_MINION " + str(self.card)
 
 
 class PlayMinion(Action):
@@ -56,7 +58,6 @@ class PlayMinion(Action):
         else:
             target = opponent.minions[self.target_idx]
 
-        print("ATTACK_MINION " + str(player.minions[self.minion_idx]) + " ON: " + str(target))
         minion = player.minions[self.minion_idx]
         minion.apply(game_state, player, target)
         if minion.health <= 0:
@@ -66,6 +67,10 @@ class PlayMinion(Action):
             del opponent.minions[self.target_idx]
 
         minion.can_attack = False
+
+    def __repr__(self):
+        return "ATTACK_MINION " + str(self.minion_idx) + " ON: " + str(
+            self.target_idx) if self.target_idx != -1 else 'PLAYER'
 
 
 class EndTurn(Action):
@@ -78,4 +83,6 @@ class EndTurn(Action):
         for minion in oponent.minions:
             minion.can_attack = True
         game_state.curr_step += 1
-        print("END_TURN")
+
+    def __repr__(self):
+        return "END_TURN"
