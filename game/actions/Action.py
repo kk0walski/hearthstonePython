@@ -16,8 +16,8 @@ class Action(object):
 
 
 def increment_mana(player):
-    if player.mana < cfg.MAX_MANA:
-        player.mana += 1
+    if player.turn_number <= cfg.MAX_MANA:
+        player.mana = player.turn_number
 
 
 def take_card(player):
@@ -28,8 +28,9 @@ def take_card(player):
 
 class PutMinion(Action):
 
-    def __init__(self, card_indx):
+    def __init__(self, card_indx, name):
         self.card = card_indx
+        self.name = name
 
     def perform(self, game_state):
         player, _ = game_state.get_players()
@@ -41,14 +42,16 @@ class PutMinion(Action):
         player.mana -= minion.cost
 
     def __repr__(self):
-        return "PUT_MINION " + str(self.card)
+        return "PUT_MINION " + str(self.name)
 
 
 class PlayMinion(Action):
 
-    def __init__(self, minion_idx, target_idx):
+    def __init__(self, minion_idx, target_idx, minion_name, target_name):
         self.minion_idx = minion_idx
         self.target_idx = target_idx
+        self.minion_name = minion_name
+        self.target_name = target_name
 
     def perform(self, game_state):
         player, opponent = game_state.get_players()
@@ -69,14 +72,14 @@ class PlayMinion(Action):
         minion.can_attack = False
 
     def __repr__(self):
-        oponent = str(self.target_idx) if self.target_idx != -1 else 'PLAYER'
-        return "ATTACK_MINION " + str(self.minion_idx) + " ON: " + oponent
+        return "ATTACK_MINION " + str(self.minion_name) + " ON: " + str(self.target_name)
 
 
 class EndTurn(Action):
 
     def perform(self, game_state):
         _, oponent = game_state.get_players()
+        oponent.turn_number += 1
         increment_mana(oponent)
         take_card(oponent)
         oponent.already_given_mana += 1

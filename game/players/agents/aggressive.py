@@ -10,12 +10,12 @@ class AggressivePlayer(BasePlayer):
         super(AggressivePlayer, self).__init__(name)
 
     def play_turn(self, game_state):
-        mctsAI = mcts(timeLimit=2000)
+        mctsAI = mcts(timeLimit=10000)
         player, oponent = game_state.get_players()
         playerState = AggressiveState(player, game_state)
         bestAction = mctsAI.search(initialState=playerState)
 
-        print(bestAction)
+        print(str(self.name) + " " + str(bestAction))
 
         newPlayerState = playerState.takeAction(bestAction)
         newState = newPlayerState.state

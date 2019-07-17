@@ -11,13 +11,13 @@ class RandomPlayer(BasePlayer):
 
     def play_turn(self, game_state):
         player, oponent = game_state.get_players()
-        playerState = PlayerState(player, game_state)
-        possible_actions = playerState.getPossibleActions()
+        player_state = PlayerState(player, game_state)
+        possible_actions = player_state.getPossibleActions()
         chosen_action = random.choice(possible_actions)
 
-        print(chosen_action)
+        print(str(self.name) + " " + str(chosen_action))
 
-        newPlayerState = playerState.takeAction(chosen_action)
-        newState = newPlayerState.state
+        new_player_state = player_state.takeAction(chosen_action)
+        new_state = new_player_state.state
 
-        return newState
+        return new_state

@@ -8,9 +8,8 @@ from game.players.agents import mcts, aggressive, controlling
 def create_initial_game_state(clsA, nameA, clsB, nameB):
     player_A = clsA(nameA)
     player_B = clsB(nameB)
-    curr_step = 0
 
-    return GameState(player_A, player_B, curr_step)
+    return GameState(player_A, player_B)
 
 
 def main():

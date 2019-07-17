@@ -19,6 +19,7 @@ class Hero(object):
         self.already_given_mana = mana
         self.minions = []
         self.cards = []
+        self.turn_number = 0
 
     def is_dead(self):
         return self.health <= 0

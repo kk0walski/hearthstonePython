@@ -1,3 +1,4 @@
+from abc import ABC, abstractmethod
 from copy import deepcopy
 
 from game import config
@@ -11,6 +12,7 @@ class GameState(object):
         self.player_A = playerA
         self.player_B = playerB
         self.player_A.mana += 1
+        self.player_A.turn_number += 1
 
         for i in range(4):
             take_card(playerA)
@@ -54,7 +56,7 @@ class GameState(object):
             # Put minion cards
             elif isinstance(card, cards.MinionCard):
                 actions['minion_puts'].append(
-                    PutMinion(idx)
+                    PutMinion(idx, card.name)
                 )
 
         # Play minion (attack)
@@ -65,11 +67,11 @@ class GameState(object):
             for target_idx in (-1, *list(range(len(opponent.minions)))):
                 if target_idx == -1:
                     actions['attack_player'].append(
-                        PlayMinion(idx, target_idx)
+                        PlayMinion(idx, target_idx, player.minions[idx].name, opponent.name)
                     )
                 else:
                     actions['attack_minion'].append(
-                        PlayMinion(idx, target_idx)
+                        PlayMinion(idx, target_idx, player.minions[idx].name, opponent.minions[target_idx].name)
                     )
 
         actions['end_turn'].append(EndTurn())
@@ -134,7 +136,8 @@ class GameState(object):
 
         return game_state_str
 
-class PlayerState(object):
+
+class PlayerState(ABC):
 
     def __init__(self, hero, state, initialState=None):
         self.hero = hero
@@ -145,6 +148,10 @@ class PlayerState(object):
             self.initialState = initialState
 
     def getPossibleActions(self):
+        """
+
+        :rtype: object
+        """
         reasult = []
         possible_actions = self.state.get_possible_actions().values()
         for item in possible_actions:
@@ -156,6 +163,10 @@ class PlayerState(object):
             return my_state.player_B
         else:
             return my_state.player_A
+
+    @abstractmethod
+    def takeAction(self, action):
+        pass
 
 
 class MCTSState(PlayerState):
