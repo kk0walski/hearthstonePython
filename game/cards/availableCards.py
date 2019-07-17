@@ -1,4 +1,5 @@
 """All available cards"""
+import random
 from copy import deepcopy
 
 from game.cards import card as cards
@@ -90,4 +91,6 @@ ALL_CARDS.extend([
 
 
 def get_all_available_cards():
-    return list(map(lambda x: deepcopy(x), ALL_CARDS))
+    reasult = list(map(lambda x: deepcopy(x), ALL_CARDS))
+    random.shuffle(reasult)
+    return reasult
