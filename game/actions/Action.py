@@ -22,7 +22,7 @@ def increment_mana(player):
 
 def take_card(player):
     if player.deck:
-        player.cards.append(player.deck.pop())
+        player.hand.append(player.deck.pop())
     else:
         player.health -= 1
 

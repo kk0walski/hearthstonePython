@@ -18,7 +18,7 @@ class Hero(object):
         self.deck = get_all_available_cards()
         self.already_given_mana = mana
         self.minions = []
-        self.cards = []
+        self.hand = []
         self.turn_number = 0
 
     def is_dead(self):

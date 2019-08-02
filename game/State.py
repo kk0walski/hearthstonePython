@@ -49,7 +49,7 @@ class GameState(object):
 
         player, opponent = self.get_players()
 
-        for idx, card in enumerate(player.cards):
+        for idx, card in enumerate(player.hand):
             if not self.can_use_card(player, card):
                 continue
 
