@@ -123,11 +123,11 @@ class GameState(object):
             player_B_name=self.player_B.name,
             player_B_health=self.player_B.health,
             player_B_total_mana=self.player_B.mana,
-            player_B_cards=self.player_B.cards,
+            player_B_cards=self.player_B.hand,
             player_B_minions=self.player_B.minions,
 
             player_A_name=self.player_A.name,
-            player_A_cards=self.player_A.cards,
+            player_A_cards=self.player_A.hand,
             player_A_health=self.player_A.health,
             player_A_total_mana=self.player_A.mana,
             player_A_minions=self.player_A.minions,

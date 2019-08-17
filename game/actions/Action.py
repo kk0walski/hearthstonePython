@@ -28,17 +28,17 @@ def take_card(player):
 
 class PutMinion(Action):
 
-    def __init__(self, card_indx, name):
-        self.card = card_indx
+    def __init__(self, minion_indx, name):
+        self.minion = minion_indx
         self.name = name
 
     def perform(self, game_state):
         player, _ = game_state.get_players()
         # Get minion
-        minion = player.cards[self.card]
+        minion = player.hand[self.minion]
         minion.can_attack = False
         player.minions.append(minion)
-        player.cards.remove(minion)
+        player.hand.remove(minion)
         player.mana -= minion.cost
 
     def __repr__(self):
