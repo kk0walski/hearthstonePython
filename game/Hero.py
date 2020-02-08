@@ -25,7 +25,7 @@ class Hero(object):
         return self.health <= 0
 
     def __hash__(self):
-        return hash((self.name, self.health, self.mana, tuple(self.minions)))
+        return hash((self.name, self.health, self.mana, tuple(self.deck), tuple(self.hand), tuple(self.minions)))
 
     def __eq__(self, other):
         if isinstance(other, Hero):
