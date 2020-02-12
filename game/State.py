@@ -14,7 +14,7 @@ class GameState(object):
         self.player_A.mana += 1
         self.player_A.turn_number += 1
 
-        for i in range(4):
+        for _ in range(4):
             take_card(playerA)
             take_card(playerB)
 
