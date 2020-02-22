@@ -105,36 +105,7 @@ class GameState(object):
         return not self.__eq__(other)
 
     def __repr__(self):
-        game_state_str = "\n" \
-                         "Player B {player_B_name} (mana: " \
-                         "{player_B_total_mana}, " \
-                         "health: {player_B_health}/{total_health})\n" \
-                         "cards: {player_B_cards}\n" \
-                         "Minions: {player_B_minions}\n" \
-                         "==============================\n" \
-                         "Minions: {player_A_minions}\n" \
-                         "cards: {player_A_cards}\n" \
-                         "Player A {player_A_name} (mana: " \
-                         "{player_A_total_mana}, " \
-                         "health: {player_A_health}/{total_health})\n" \
-                         "\n"
-
-        game_state_str = game_state_str.format(
-            player_B_name=self.player_B.name,
-            player_B_health=self.player_B.health,
-            player_B_total_mana=self.player_B.mana,
-            player_B_cards=self.player_B.hand,
-            player_B_minions=self.player_B.minions,
-
-            player_A_name=self.player_A.name,
-            player_A_cards=self.player_A.hand,
-            player_A_health=self.player_A.health,
-            player_A_total_mana=self.player_A.mana,
-            player_A_minions=self.player_A.minions,
-            total_health=config.INITIAL_HEALTH
-        )
-
-        return game_state_str
+        return str((self.player_A, self.player_B, self.curr_step))
 
 
 class PlayerState(ABC):

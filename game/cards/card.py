@@ -44,13 +44,7 @@ class MinionCard(Card):
             raise ValueError('Target not defined or not recognized!')
 
     def __repr__(self):
-        fmt_str = "MC({name}, " \
-                  "H: {health}, " \
-                  "A: {attack}, " \
-                  "C: {cost})"
-
-        return fmt_str.format(name=self.name, health=self.health,
-                              attack=self.attack, cost=self.cost)
+        return str((self.name, self.health, self.attack, self.can_attack))
 
     def __hash__(self):
         return hash((self.name, self.health, self.attack, self.can_attack))
