@@ -138,6 +138,9 @@ class PlayerState(ABC):
         else:
             return my_state.player_A
 
+    def get_players(self):
+        return self.state.get_players()
+
     @abstractmethod
     def takeAction(self, action):
         pass
@@ -164,9 +167,6 @@ class TurnState(PlayerState):
 
     def isTerminal(self):
         return self.state.curr_step != self.initialState.curr_step
-
-    def get_players(self):
-        self.state.get_players()
 
 
 class AggressiveState(TurnState):

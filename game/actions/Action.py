@@ -46,9 +46,9 @@ class PutMinion(Action):
         player.mana -= minion.cost
 
     def getCard(self, game_state):
-         player, _ = game_state.get_players()
-         minion = player.hand[self.minion]
-         return minion
+        player, _ = game_state.get_players()
+        minion = player.hand[self.minion]
+        return minion
 
     def __repr__(self):
         return "PUT_MINION " + str(self.name)
@@ -83,6 +83,7 @@ class PlayMinion(Action):
     def getCard(self, game_state):
         player, _ = game_state.get_players()
         minion = player.minions[self.minion_idx]
+        return minion
 
     def __repr__(self):
         return "ATTACK_MINION " + str(self.minion_name) + " ON: " + str(self.target_name)
