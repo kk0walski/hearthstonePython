@@ -129,6 +129,9 @@ class PlayerState(ABC):
             reasult.extend(item)
         return reasult
 
+    def getPossibleActionsDict(self):
+        return self.state.get_possible_actions()
+
     def getOponent(self, my_state):
         if my_state.player_A.name == self.hero.name:
             return my_state.player_B
