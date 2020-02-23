@@ -14,7 +14,7 @@ class Action(object):
         """Perform action"""
         pass
 
-    def getCard():
+    def getCard(self, game_state):
         """Get Card"""
         return None
 
@@ -45,7 +45,7 @@ class PutMinion(Action):
         player.hand.remove(minion)
         player.mana -= minion.cost
 
-    def getCard():
+    def getCard(self, game_state):
          player, _ = game_state.get_players()
          minion = player.hand[self.minion]
          return minion
@@ -80,7 +80,7 @@ class PlayMinion(Action):
 
         minion.can_attack = False
 
-    def getCard():
+    def getCard(self, game_state):
         player, _ = game_state.get_players()
         minion = player.minions[self.minion_idx]
 

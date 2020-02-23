@@ -6,13 +6,13 @@ from game.actions.Action import PutMinion, PlayMinion, EndTurn
 from game.players.Player import BasePlayer
 
 
-class AggressivePlayer(BasePlayer):
+attackHeroMul = 100
+attackMinionMul = 10
+cardsMul = 10
+deadlyShotMul = 3
+endRoundMul = 1
 
-    attackHeroMul = 100
-    attackMinionMul = 10
-    cardsMul = 10
-    deadlyShotMul = 3
-    endRoundMul = 1
+class AggressivePlayer(BasePlayer):
 
     def __init__(self, name):
         super(AggressivePlayer, self).__init__(name)
@@ -38,7 +38,7 @@ class AggressivePlayer(BasePlayer):
                 currentValue = self.evaluateMove(state, action)
                 if currentValue > bestFoundValue:
                     bestFound = action
-                    bestFound = currentValue
+                    bestFoundValue = currentValue
 
             state = state.takeAction(bestFound)
             
@@ -48,13 +48,13 @@ class AggressivePlayer(BasePlayer):
         boardSize = 1 if len(state.hero.minions) == 0 else len(state.hero.minions)
         if isinstance(move, PlayMinion):
             if(move.target_idx == -1):
-                card = move.getCard()
+                card = move.getCard(state)
                 return  attackHeroMul * card.attack - (1/boardSize)*cardsMul
             else:
-                card = move.getCard()
+                card = move.getCard(state)
                 return attackMinionMul * card.attack - card.cost + (1 / boardSize) * cardsMul
         if isinstance(move, PutMinion):
-            card = move.getCard()
+            card = move.getCard(state)
             return attackMinionMul * card.attack - card.cost + (1 / boardSize) * cardsMul
         if isinstance(move, EndTurn):
             return endRoundMul
