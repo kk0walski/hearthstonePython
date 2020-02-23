@@ -34,6 +34,8 @@ class AggressivePlayer(BasePlayer):
 
             print(str(self.name) + " " + str(bestFound))
             playerState = playerState.takeAction(bestFound)
+            if not isinstance(bestFound, EndTurn):
+                print(playerState.state)
             
         return playerState.state
 
