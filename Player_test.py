@@ -1,5 +1,4 @@
 import unittest
-import pandas as pd
 
 from game import config as cfg
 from game.State import GameState
@@ -24,11 +23,6 @@ class TestStringMethods(unittest.TestCase):
         player1 = BasePlayer("FIRST")
         player2 = BasePlayer("SECOND")
         state = GameState(player1, player2, curr_step=1)
-        dictonary = {state: 1}
-        df = pd.DataFrame(data=dictonary, index=[0])
-        df = (df.T)
-        print (df)
-        df.to_excel('dict1.xlsx')
         assert player1, player2 == state.get_players()
         possibleActions = state.get_possible_actions()
         assert len(possibleActions['attack_player']) == len([minion for minion in player1.minions if minion.can_attack])
