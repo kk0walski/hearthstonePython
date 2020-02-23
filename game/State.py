@@ -61,18 +61,17 @@ class GameState(object):
 
         # Play minion (attack)
         for idx, minion in enumerate(player.minions):
-            if not minion.can_attack:
-                continue
-
-            for target_idx in (-1, *list(range(len(opponent.minions)))):
-                if target_idx == -1:
-                    actions['attack_player'].append(
-                        PlayMinion(idx, target_idx, player.minions[idx].name, opponent.name)
-                    )
-                else:
-                    actions['attack_minion'].append(
-                        PlayMinion(idx, target_idx, player.minions[idx].name, opponent.minions[target_idx].name)
-                    )
+            
+            if  minion.can_attack:
+                for target_idx in (-1, *list(range(len(opponent.minions)))):
+                    if target_idx == -1:
+                        actions['attack_player'].append(
+                            PlayMinion(idx, target_idx, player.minions[idx].name, opponent.name)
+                        )
+                    else:
+                        actions['attack_minion'].append(
+                            PlayMinion(idx, target_idx, player.minions[idx].name, opponent.minions[target_idx].name)
+                        )
 
         actions['end_turn'].append(EndTurn())
 

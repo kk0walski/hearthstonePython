@@ -17,31 +17,24 @@ class ControllingPlayer(BasePlayer):
         super(ControllingPlayer, self).__init__(name)
 
     def play_turn(self, game_state):
-        mctsAI = mcts(timeLimit=10000, rolloutPolicy=self.policy)
         player, oponent = game_state.get_players()
-        playerState = ControlingState(player, game_state)
-        bestAction = mctsAI.search(initialState=playerState)
+        playerState = AggressiveState(player, game_state)
+        return self.policy(playerState)
 
-        print(str(self.name) + " " + str(bestAction))
-
-        newPlayerState = playerState.takeAction(bestAction)
-        newState = newPlayerState.state
-
-        return newState
-
-    def policy(self, state):
-        while not state.isTerminal():
+    def policy(self, playerState):
+        while not playerState.isTerminal():
             bestFound = None
             bestFoundValue = -sys.maxsize -1
-            for action in state.getPossibleActions():
-                currentValue = self.evaluateMove(state, action)
+            for action in playerState.getPossibleActions():
+                currentValue = self.evaluateMove(playerState, action)
                 if currentValue > bestFoundValue:
                     bestFound = action
                     bestFoundValue = currentValue
 
-            state = state.takeAction(bestFound)
+            print(str(self.name) + " " + str(bestFound))
+            playerState = playerState.takeAction(bestFound)
             
-        return state.getReward()
+        return playerState.state
 
     def evaluateMove(self, state, move):
         boardSize = 1 if len(state.hero.minions) == 0 else len(state.hero.minions)
