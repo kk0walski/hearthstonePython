@@ -10,7 +10,7 @@ class MCTSPlayer(BasePlayer):
         super(MCTSPlayer, self).__init__(name)
 
     def play_turn(self, game_state):
-        mctsAI = mcts(timeLimit=10000)
+        mctsAI = mcts(timeLimit=20000)
         player, oponent = game_state.get_players()
         playerState = MCTSState(player, game_state)
         bestAction = mctsAI.search(initialState=playerState)

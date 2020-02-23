@@ -1,16 +1,24 @@
 from mcts import mcts
+import sys
 
 from game.State import AggressiveState
+from game.actions.Action import PutMinion, PlayMinion, EndTurn
 from game.players.Player import BasePlayer
 
 
 class AggressivePlayer(BasePlayer):
 
+    attackHeroMul = 100
+    attackMinionMul = 10
+    cardsMul = 10
+    deadlyShotMul = 3
+    endRoundMul = 1
+
     def __init__(self, name):
         super(AggressivePlayer, self).__init__(name)
 
     def play_turn(self, game_state):
-        mctsAI = mcts(timeLimit=10000)
+        mctsAI = mcts(timeLimit=10000, rolloutPolicy=self.policy)
         player, oponent = game_state.get_players()
         playerState = AggressiveState(player, game_state)
         bestAction = mctsAI.search(initialState=playerState)
@@ -21,3 +29,32 @@ class AggressivePlayer(BasePlayer):
         newState = newPlayerState.state
 
         return newState
+
+    def policy(self, state):
+        while not state.isTerminal():
+            bestFound = None
+            bestFoundValue = -sys.maxsize -1
+            for action in state.getPossibleActions():
+                currentValue = self.evaluateMove(state, action)
+                if currentValue > bestFoundValue:
+                    bestFound = action
+                    bestFound = currentValue
+
+            state = state.takeAction(bestFound)
+            
+        return state.getReward()
+
+    def evaluateMove(self, state, move):
+        boardSize = 1 if len(state.hero.minions) == 0 else len(state.hero.minions)
+        if isinstance(move, PlayMinion):
+            if(move.target_idx == -1):
+                card = move.getCard()
+                return  attackHeroMul * card.attack - (1/boardSize)*cardsMul
+            else:
+                card = move.getCard()
+                return attackMinionMul * card.attack - card.cost + (1 / boardSize) * cardsMul
+        if isinstance(move, PutMinion):
+            card = move.getCard()
+            return attackMinionMul * card.attack - card.cost + (1 / boardSize) * cardsMul
+        if isinstance(move, EndTurn):
+            return endRoundMul

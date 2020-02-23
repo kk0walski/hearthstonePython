@@ -14,6 +14,10 @@ class Action(object):
         """Perform action"""
         pass
 
+    def getCard():
+        """Get Card"""
+        return None
+
 
 def increment_mana(player):
     if player.turn_number <= cfg.MAX_MANA:
@@ -76,7 +80,7 @@ class PlayMinion(Action):
 
         minion.can_attack = False
 
-    def getCard()
+    def getCard():
         player, _ = game_state.get_players()
         minion = player.minions[self.minion_idx]
 
