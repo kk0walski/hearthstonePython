@@ -18,7 +18,7 @@ class ControllingPlayer(BasePlayer):
 
     def play_turn(self, game_state):
         player, oponent = game_state.get_players()
-        playerState = AggressiveState(player, game_state)
+        playerState = ControlingState(player, game_state)
         return self.policy(playerState)
 
     def policy(self, playerState):
