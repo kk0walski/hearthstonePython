@@ -40,15 +40,17 @@ class ControllingPlayer(BasePlayer):
 
     def evaluateMove(self, state, move):
         boardSize = 1 if len(state.hero.minions) == 0 else len(state.hero.minions)
+        newState = state.takeAction(move)
+        mark = newState.getReward()
         if isinstance(move, PlayMinion):
             if(move.target_idx == -1):
                 card = move.getCard(state)
-                return  attackHeroMul * card.attack - (1/boardSize)*cardsMul
+                return  attackHeroMul * card.attack - (1/boardSize)*cardsMul + mark
             else:
                 card = move.getCard(state)
-                return attackMinionMul * card.attack - card.cost + (1 / boardSize) * cardsMul
+                return attackMinionMul * card.attack - card.cost + (1 / boardSize) * cardsMul + mark
         if isinstance(move, PutMinion):
             card = move.getCard(state)
-            return attackMinionMul * card.attack - card.cost + (1 / boardSize) * cardsMul
+            return attackMinionMul * card.attack - card.cost + (1 / boardSize) * cardsMul + mark
         if isinstance(move, EndTurn):
             return endRoundMul
