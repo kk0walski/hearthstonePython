@@ -33,10 +33,11 @@ class TestStringMethods(unittest.TestCase):
 
 
     def test_state(self):
-        assert self.playerA, self.playerB == self.state.get_players()
+        self.playerA, self.playerB == self.state.get_players()
+        player1, player2 = self.state.get_players()
         possibleActions = self.state.get_possible_actions()
-        assert len(possibleActions['attack_player']) == len([minion for minion in self.playerA.minions if minion.can_attack])
-        assert len(possibleActions['minion_puts']) == len([card for card in self.playerA.hand if card.cost <= self.playerA.mana])
+        assert len(possibleActions['attack_player']) == len([minion for minion in player1.minions if minion.can_attack])
+        assert len(possibleActions['minion_puts']) == len([card for card in player1.hand if card.cost <= player1.mana])
         assert len(possibleActions['end_turn']) == 1
 
 
