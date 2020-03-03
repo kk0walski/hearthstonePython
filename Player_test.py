@@ -22,10 +22,14 @@ class TestStringMethods(unittest.TestCase):
         assert self.playerA.deck != cards
         assert self.playerA.mana == cfg.INITIAL_MANA + 1
         assert self.playerA.health == cfg.INITIAL_HEALTH
+        assert len(self.playerA.hand) == 4
+        assert len(self.playerA.minions) == 0
         assert self.playerB.name == "SECOND"
         assert self.playerB.deck != cards
         assert self.playerB.mana == cfg.INITIAL_MANA
         assert self.playerB.health == cfg.INITIAL_HEALTH
+        assert len(self.playerB.hand) == 4
+        assert len(self.playerB.minions) == 0
 
 
     def test_state(self):
@@ -34,8 +38,6 @@ class TestStringMethods(unittest.TestCase):
         assert len(possibleActions['attack_player']) == len([minion for minion in self.playerA.minions if minion.can_attack])
         assert len(possibleActions['minion_puts']) == len([card for card in self.playerA.hand if card.cost <= self.playerA.mana])
         assert len(possibleActions['end_turn']) == 1
-        assert len(self.playerA.hand) == 4
-        assert len(self.playerB.hand) == 4
 
 
 if __name__ == '__main__':
